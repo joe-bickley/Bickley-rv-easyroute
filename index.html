@@ -1,11 +1,11 @@
-<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1,viewport-fit=cover'><title>RV EasyRoute V1.3</title><link href='https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.css' rel='stylesheet'><style>
+<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1,viewport-fit=cover'><title>RV EasyRoute V1.4</title><link href='https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.css' rel='stylesheet'><style>
 :root{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#15202b;background:#f4f6f8}*{box-sizing:border-box}body{margin:0}.top{padding:18px 18px 12px;background:#102a43;color:white}.top h1{margin:0;font-size:24px}.top p{margin:5px 0 0;opacity:.8}.wrap{display:grid;grid-template-columns:360px 1fr;height:calc(100vh - 83px)}.panel{overflow:auto;padding:14px;background:white;border-right:1px solid #d9e2ec}.card{border:1px solid #d9e2ec;border-radius:12px;padding:12px;margin-bottom:12px}.card h2{font-size:16px;margin:0 0 10px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}label{font-size:12px;font-weight:600;color:#486581}input,select{width:100%;padding:10px;border:1px solid #bcccdc;border-radius:8px;font-size:15px;margin-top:4px}.full{grid-column:1/-1}.check{display:flex;gap:8px;align-items:center;font-size:14px;margin-top:8px}.check input{width:auto;margin:0}button{width:100%;border:0;border-radius:10px;padding:12px;font-size:15px;font-weight:700;background:#1677ff;color:white}button.secondary{background:#e8eef5;color:#243b53;margin-top:8px}.status{font-size:13px;padding:9px;border-radius:8px;background:#f0f4f8;margin-top:8px}.route{border:1px solid #bcccdc;border-radius:10px;padding:10px;margin-top:8px;cursor:pointer}.route.best{border:2px solid #1677ff}.route h3{margin:0 0 4px;font-size:15px}.metric{display:flex;justify-content:space-between;font-size:13px;padding:2px 0}.badge{font-size:11px;background:#e6f0ff;padding:3px 6px;border-radius:10px}.warn{background:#fff4e5;padding:8px;border-radius:8px;font-size:12px;margin-top:8px}.fine{font-size:11px;color:#627d98;line-height:1.35}.map{height:100%;min-height:420px}#map{height:100%}.hidden{display:none}.geoBox{margin-top:8px;padding:9px;border:1px solid #d9e2ec;border-radius:8px;background:#fff}.geoTitle{font-size:12px;font-weight:700;color:#486581;margin-bottom:6px}.geoChoice{display:block;width:100%;text-align:left;background:#eef4fb;color:#243b53;margin:6px 0;padding:9px;border-radius:8px;font-weight:600}.geoChoice small{display:block;font-weight:400;color:#627d98;margin-top:2px}.geoOk{background:#e8f5e9}.geoWarn{background:#fff4e5}.geoError{background:#fdecec;color:#8a1c1c}@media(max-width:800px){.wrap{display:block;height:auto}.panel{border:0}.map{height:55vh}.top{position:sticky;top:0;z-index:10}.wrap{grid-template-columns:1fr}}
-</style></head><body><header class='top'><h1>RV EasyRoute <span style='font-size:13px;opacity:.65'>V1.3</span></h1><p>Compare routes for a large RV — not just the fastest car route.</p></header><main class='wrap'><section class='panel'>
+</style></head><body><header class='top'><h1>RV EasyRoute <span style='font-size:13px;opacity:.65'>V1.4</span></h1><p>Compare routes for a large RV — not just the fastest car route.</p></header><main class='wrap'><section class='panel'>
 <div class='card'><h2>1. Free Mapbox token</h2><label>Public access token<input id='token' type='password' placeholder='pk.eyJ...'></label><button class='secondary' id='saveToken'>Save on this device</button><p class='fine'>V1 calls Mapbox directly from your browser. Use a public token with URL restrictions before sharing the app.</p></div>
 <div class='card'><h2>2. RV profile</h2><div class='grid'><label>Height (ft)<input id='height' type='number' step='.1' value='11.5'></label><label>Width (ft)<input id='width' type='number' step='.1' value='8.5'></label><label>RV weight (lb)<input id='rvweight' type='number' value='14500'></label><label>Towed weight (lb)<input id='towweight' type='number' value='5100'></label><label class='full'>Total length (ft)<input id='length' type='number' step='.1' value='48'></label></div><label class='check'><input id='towing' type='checkbox' checked> Towing vehicle</label><p class='fine'>Road weight screening uses the motorhome weight only. The towed vehicle is shown for trip context but is not added to Mapbox's vehicle-weight restriction parameter.</p></div>
 <div class='card'><h2>3. Trip</h2><label>Start<input id='start' value='Eureka Springs, AR'></label><div id='startMatches' class='hidden'></div><label>Destination<input id='end' value='Kentucky Dam Village State Resort Park, KY'></label><div id='endMatches' class='hidden'></div><label class='check'><input id='unpaved' type='checkbox' checked> Avoid unpaved roads</label><label class='check'><input id='tolls' type='checkbox'> Avoid toll roads</label><button id='go' style='margin-top:12px'>Compare RV routes</button><div id='status' class='status'>Ready.</div><div id='resolved' class='fine' style='margin-top:8px'></div></div>
-<div class='card'><h2>Route comparison</h2><p class='fine'>V1.3 first calculates a normal-car baseline, then RV-screened routes. It also validates the resolved start and destination before routing so a weak geocoder match cannot silently send you to the wrong place.</p><div id='baseline' class='status'>Baseline comparison will appear here.</div><div id='results'><p class='fine'>Routes will appear here. V1 uses known height, width and weight restrictions from Mapbox and requests up to two alternatives.</p></div></div>
-<div class='card'><h2>V1.3 limitations</h2><p class='fine'>V1.3 validates geocoder matches and asks you to choose when a long place name resolves weakly or only to a generic city/place. It calculates curvature from route geometry and estimates grades from sampled SRTM elevation. It still does not know true lane count, shoulder width, propane restrictions, axle limits, or every RV-specific legal restriction. Elevation sampling is a prototype estimate and can exaggerate very short grade changes. Always verify critical restrictions with posted signs and authoritative sources.</p></div>
+<div class='card'><h2>Route comparison</h2><p class='fine'>V1.4 first calculates a normal-car baseline, then RV-screened routes. It also validates the resolved start and destination before routing so a weak geocoder match cannot silently send you to the wrong place.</p><div id='baseline' class='status'>Baseline comparison will appear here.</div><div id='results'><p class='fine'>Routes will appear here. V1 uses known height, width and weight restrictions from Mapbox and requests up to two alternatives.</p></div></div>
+<div class='card'><h2>V1.4 limitations</h2><p class='fine'>V1.4 tries POI/address searches and simplified name variants before falling back to cities/regions; weak matches still require confirmation. It calculates curvature from route geometry and estimates grades from sampled SRTM elevation. It still does not know true lane count, shoulder width, propane restrictions, axle limits, or every RV-specific legal restriction. Elevation sampling is a prototype estimate and can exaggerate very short grade changes. Always verify critical restrictions with posted signs and authoritative sources.</p></div>
 </section><section class='map'><div id='map'></div></section></main>
 <script src='https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.js'></script><script>
 const $=id=>document.getElementById(id); let map=null, markers=[]; const colors=['#1677ff','#f59e0b','#7c3aed'];
@@ -22,35 +22,75 @@ function matchScore(q,f){
   if(ln.includes(qn)&&qn.length>3)score+=.35;
   if(p.name&&qn.includes(norm(p.name))&&norm(p.name).length>3)score+=.15;
   if(['poi','address'].includes(p.feature_type))score+=.12;
-  if(p.feature_type==='place'&&qw.size>=3)score-=.18;
+  if(['region','place','locality'].includes(p.feature_type)&&qw.size>=3)score-=.18;
   return Math.max(0,Math.min(1.5,score));
 }
-async function geocodeCandidates(q,token){
-  const u='https://api.mapbox.com/search/geocode/v6/forward?q='+encodeURIComponent(q)+'&limit=5&country=US&language=en&access_token='+encodeURIComponent(token);
+function variants(q){
+  const out=[q];
+  // Named parks/POIs often fail when state abbreviations and descriptive suffixes are mixed.
+  const noState=q.replace(/,\s*[A-Z]{2}\s*$/i,'').trim();
+  if(noState!==q) out.push(noState);
+  if(/\bstate resort park\b/i.test(q)){
+    out.push(q.replace(/\bstate resort park\b/i,'State Park'));
+    out.push(q.replace(/\bstate resort park\b/i,'').replace(/,\s*,/g,',').trim());
+  }
+  if(/\bresort park\b/i.test(q)) out.push(q.replace(/\bresort park\b/i,'Park'));
+  return [...new Set(out.map(x=>x.replace(/\s+/g,' ').trim()).filter(Boolean))];
+}
+async function fetchGeo(q,token,types=''){
+  let u='https://api.mapbox.com/search/geocode/v6/forward?q='+encodeURIComponent(q)+'&limit=10&country=US&language=en';
+  if(types)u+='&types='+encodeURIComponent(types);
+  u+='&access_token='+encodeURIComponent(token);
   const r=await fetch(u); if(!r.ok)throw new Error('Geocoding failed');
-  const j=await r.json(); if(!j.features?.length)throw new Error('Place not found: '+q);
-  return j.features.map(f=>{const p=f.properties||{};return {coords:f.geometry.coordinates,label:p.full_address||[p.name,p.place_formatted].filter(Boolean).join(', ')||q,type:p.feature_type||'unknown',score:matchScore(q,f)};}).sort((a,b)=>b.score-a.score);
+  const j=await r.json(); return j.features||[];
+}
+async function geocodeCandidates(q,token){
+  const qs=variants(q);
+  let fs=[];
+  // First favor POIs/addresses; then allow geographic places as a fallback.
+  for(const v of qs){
+    try{fs.push(...await fetchGeo(v,token,'poi,address'));}catch(e){}
+  }
+  if(!fs.length){
+    for(const v of qs){try{fs.push(...await fetchGeo(v,token,''));}catch(e){}}
+  } else {
+    // Add a small general fallback set, but POIs should dominate scoring.
+    try{fs.push(...await fetchGeo(q,token,''));}catch(e){}
+  }
+  const seen=new Set(), arr=[];
+  for(const f of fs){
+    const p=f.properties||{}, label=p.full_address||[p.name,p.place_formatted].filter(Boolean).join(', ')||q;
+    const key=label+'|'+(f.geometry?.coordinates||[]).join(',');
+    if(seen.has(key))continue; seen.add(key);
+    arr.push({coords:f.geometry.coordinates,label,type:p.feature_type||'unknown',score:matchScore(q,f)});
+  }
+  if(!arr.length)throw new Error('Place not found: '+q);
+  return arr.sort((a,b)=>b.score-a.score).slice(0,7);
 }
 function showChoices(which,q,cands){
   const box=$(which+'Matches'); box.className='geoBox';
   box.innerHTML='<div class="geoTitle">Confirm '+(which==='start'?'start':'destination')+'</div>'+
-    cands.map((c,i)=>`<button type="button" class="geoChoice" data-which="${which}" data-i="${i}">${c.label}<small>${c.type} · match ${Math.round(c.score*100)}%</small></button>`).join('');
+    cands.map((c,i)=>`<button type="button" class="geoChoice" data-i="${i}">${c.label}<small>${c.type} · match ${Math.round(c.score*100)}%</small></button>`).join('');
   return new Promise(resolve=>{
     box.querySelectorAll('.geoChoice').forEach(btn=>btn.onclick=()=>{
-      const c=cands[+btn.dataset.i]; box.innerHTML=`<div class="status geoOk"><b>Selected:</b> ${c.label}</div>`; resolve(c);
+      const c=cands[+btn.dataset.i];
+      box.innerHTML=`<div class="status geoOk"><b>Selected:</b> ${c.label}</div>`;
+      resolve(c);
     });
   });
 }
 async function resolvePlace(which,q,token){
-  const cands=await geocodeCandidates(q,token), best=cands[0];
-  const qWords=words(q).size;
-  const suspicious=(qWords>=3 && best.score<0.62) || (qWords>=4 && best.type==='place') || best.score<0.48;
-  if(suspicious){
-    $('status').textContent='Please confirm the '+(which==='start'?'start':'destination')+' location below.';
-    return await showChoices(which,q,cands);
+  const cands=await geocodeCandidates(q,token), best=cands[0], qWords=words(q).size;
+  // Auto-accept strong POI/address matches and simple city/place searches.
+  const strongPOI=['poi','address'].includes(best.type)&&best.score>=.58;
+  const simplePlace=qWords<=3&&best.score>=.55;
+  if(strongPOI||simplePlace){
+    const box=$(which+'Matches'); box.className='geoBox';
+    box.innerHTML=`<div class="status geoOk"><b>Resolved:</b> ${best.label}</div>`;
+    return best;
   }
-  const box=$(which+'Matches'); box.className='geoBox'; box.innerHTML=`<div class="status geoOk"><b>Resolved:</b> ${best.label}</div>`;
-  return best;
+  $('status').textContent='Please confirm the '+(which==='start'?'start':'destination')+' location below.';
+  return await showChoices(which,q,cands);
 }
 const ftm=x=>x*0.3048, lbton=x=>x*0.00045359237, mi=x=>x/1609.344;
 function fmtTime(sec){let h=Math.floor(sec/3600),m=Math.round((sec%3600)/60);return h+' hr '+m+' min'}
