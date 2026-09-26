@@ -1,14 +1,14 @@
-<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1,viewport-fit=cover'><title>RV EasyRoute V1.7</title><link href='https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.css' rel='stylesheet'><style>
+<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1,viewport-fit=cover'><title>RV EasyRoute V1.8</title><link href='https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.css' rel='stylesheet'><style>
 :root{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#15202b;background:#f4f6f8}*{box-sizing:border-box}body{margin:0}.top{padding:18px 18px 12px;background:#102a43;color:white}.top h1{margin:0;font-size:24px}.top p{margin:5px 0 0;opacity:.8}.wrap{display:grid;grid-template-columns:360px 1fr;height:calc(100vh - 83px)}.panel{overflow:auto;padding:14px;background:white;border-right:1px solid #d9e2ec}.card{border:1px solid #d9e2ec;border-radius:12px;padding:12px;margin-bottom:12px}.card h2{font-size:16px;margin:0 0 10px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}label{font-size:12px;font-weight:600;color:#486581}input,select{width:100%;padding:10px;border:1px solid #bcccdc;border-radius:8px;font-size:15px;margin-top:4px}.full{grid-column:1/-1}.check{display:flex;gap:8px;align-items:center;font-size:14px;margin-top:8px}.check input{width:auto;margin:0}button{width:100%;border:0;border-radius:10px;padding:12px;font-size:15px;font-weight:700;background:#1677ff;color:white}button.secondary{background:#e8eef5;color:#243b53;margin-top:8px}.status{font-size:13px;padding:9px;border-radius:8px;background:#f0f4f8;margin-top:8px}.route{border:1px solid #bcccdc;border-radius:10px;padding:10px;margin-top:8px;cursor:pointer}.route.best{border:2px solid #1677ff}.route.selected{border:3px solid #1677ff;background:#f3f8ff;box-shadow:0 0 0 2px rgba(22,119,255,.12)}.route h3{margin:0 0 4px;font-size:15px}.metric{display:flex;justify-content:space-between;font-size:13px;padding:2px 0}.badge{font-size:11px;background:#e6f0ff;padding:3px 6px;border-radius:10px}.warn{background:#fff4e5;padding:8px;border-radius:8px;font-size:12px;margin-top:8px}.fine{font-size:11px;color:#627d98;line-height:1.35}.map{height:100%;min-height:420px}#map{height:100%}.hidden{display:none}.geoBox{margin-top:8px;padding:9px;border:1px solid #d9e2ec;border-radius:8px;background:#fff}.geoTitle{font-size:12px;font-weight:700;color:#486581;margin-bottom:6px}.geoChoice{display:block;width:100%;text-align:left;background:#eef4fb;color:#243b53;margin:6px 0;padding:9px;border-radius:8px;font-weight:600}.geoChoice small{display:block;font-weight:400;color:#627d98;margin-top:2px}.geoOk{background:#e8f5e9}.geoWarn{background:#fff4e5}.geoError{background:#fdecec;color:#8a1c1c}@media(max-width:800px){.wrap{display:block;height:auto}.panel{border:0}.map{height:55vh}.top{position:sticky;top:0;z-index:10}.wrap{grid-template-columns:1fr}}
-</style></head><body><header class='top'><h1>RV EasyRoute <span style='font-size:13px;opacity:.65'>V1.7</span></h1><p>Compare routes for a large RV — not just the fastest car route.</p></header><main class='wrap'><section class='panel'>
+</style></head><body><header class='top'><h1>RV EasyRoute <span style='font-size:13px;opacity:.65'>V1.8</span></h1><p>Compare routes for a large RV — not just the fastest car route.</p></header><main class='wrap'><section class='panel'>
 <div class='card'><h2>1. Free Mapbox token</h2><label>Public access token<input id='token' type='password' placeholder='pk.eyJ...'></label><button class='secondary' id='saveToken'>Save on this device</button><p class='fine'>V1 calls Mapbox directly from your browser. Use a public token with URL restrictions before sharing the app.</p></div>
 <div class='card'><h2>2. RV profile</h2><div class='grid'><label>Height (ft)<input id='height' type='number' step='.1' value='11.5'></label><label>Width (ft)<input id='width' type='number' step='.1' value='8.5'></label><label>RV weight (lb)<input id='rvweight' type='number' value='14500'></label><label>Towed weight (lb)<input id='towweight' type='number' value='5100'></label><label class='full'>Total length (ft)<input id='length' type='number' step='.1' value='48'></label></div><label class='check'><input id='towing' type='checkbox' checked> Towing vehicle</label><p class='fine'>Road weight screening uses the motorhome weight only. The towed vehicle is shown for trip context but is not added to Mapbox's vehicle-weight restriction parameter.</p></div>
 <div class='card'><h2>3. Trip</h2><label>Start<input id='start' value='Eureka Springs, AR'></label><button class='secondary' id='useLocation' type='button'>Use My Exact Location</button><div id='startMatches' class='hidden'></div><label style='display:block;margin-top:10px'>Route via (optional)<input id='via' placeholder='Town, road, park, or address'></label><div id='viaMatches' class='hidden'></div><label style='display:block;margin-top:10px'>Destination<input id='end' value='Kentucky Dam Village State Resort Park, KY'></label><div id='endMatches' class='hidden'></div><label class='check'><input id='unpaved' type='checkbox' checked> Avoid unpaved roads</label><label class='check'><input id='tolls' type='checkbox'> Avoid toll roads</label><button id='go' style='margin-top:12px'>Compare RV routes</button><button class='secondary hidden' id='googleMaps' type='button'>Open trip in Google Maps</button><div id='status' class='status'>Ready.</div><div id='resolved' class='fine' style='margin-top:8px'></div></div>
-<div class='card'><h2>Route comparison</h2><p class='fine'>V1.7 first calculates a normal-car baseline, then RV-screened routes. It also validates the resolved start and destination before routing so a weak geocoder match cannot silently send you to the wrong place.</p><div id='baseline' class='status'>Baseline comparison will appear here.</div><div id='results'><p class='fine'>Routes will appear here. V1 uses known height, width and weight restrictions from Mapbox and requests up to two alternatives.</p></div></div>
-<div class='card'><h2>V1.7 limitations</h2><p class='fine'>V1.7 adds extra automatically generated corridor alternatives, visible route selection, device location, an optional via point, persistent RV profile values, and Google Maps handoff. Place search uses Mapbox first with an OpenStreetMap fallback. Elevation and RV-specific legal restrictions still require independent verification. It calculates curvature from route geometry and estimates grades from sampled SRTM elevation. It still does not know true lane count, shoulder width, propane restrictions, axle limits, or every RV-specific legal restriction. Elevation sampling is a prototype estimate and can exaggerate very short grade changes. Always verify critical restrictions with posted signs and authoritative sources.</p></div>
+<div class='card'><h2>Route comparison</h2><p class='fine'>V1.8 first calculates a normal-car baseline, then RV-screened routes. It also validates the resolved start and destination before routing so a weak geocoder match cannot silently send you to the wrong place.</p><div id='baseline' class='status'>Baseline comparison will appear here.</div><div id='results'><p class='fine'>Routes will appear here. V1 uses known height, width and weight restrictions from Mapbox and requests up to two alternatives.</p></div></div>
+<div class='card'><h2>V1.8 limitations</h2><p class='fine'>V1.8 discovers additional corridors through real intermediate places, rejects doglegs and near-duplicate routes, visible route selection, device location, an optional via point, persistent RV profile values, and Google Maps handoff. Place search uses Mapbox first with an OpenStreetMap fallback. Elevation and RV-specific legal restrictions still require independent verification. It calculates curvature from route geometry and estimates grades from sampled SRTM elevation. It still does not know true lane count, shoulder width, propane restrictions, axle limits, or every RV-specific legal restriction. Elevation sampling is a prototype estimate and can exaggerate very short grade changes. Always verify critical restrictions with posted signs and authoritative sources.</p></div>
 </section><section class='map'><div id='map'></div></section></main>
 <script src='https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.js'></script><script>
-const $=id=>document.getElementById(id); let map=null, markers=[], currentStartCoords=null, lastResolved=null; const colors=['#1677ff','#f59e0b','#7c3aed'];
+const $=id=>document.getElementById(id); let map=null, markers=[], currentStartCoords=null, lastResolved=null; const colors=['#1677ff','#f59e0b','#7c3aed','#16a34a','#dc2626','#0891b2'];
 $('token').value=localStorage.getItem('rvER_token')||'';
 $('saveToken').onclick=()=>{localStorage.setItem('rvER_token',$('token').value.trim()); $('status').textContent='Token saved on this device.'};
 // Keep the RV profile on this browser.
@@ -165,12 +165,73 @@ function easeScore(r,fastest){let c=r.analysis.curve,e=r.analysis.elev;let penal
 async function analyzeRoutes(routes){for(let r of routes){r.analysis={curve:curvatureStats(r.geometry.coordinates),elev:await elevationStats(r.geometry.coordinates)};}return routes;}
 function difficulty(score){return score>=85?'Easy':score>=70?'Moderate':'Challenging';}
 let selectedRouteIndex=0;
-function renderRoutes(routes){const fastest=Math.min(...routes.map(r=>r.duration));let ranked=[...routes].sort((a,b)=>easeScore(b,fastest)-easeScore(a,fastest));let easiest=ranked[0];$('results').innerHTML=routes.map((r,i)=>{let sc=easeScore(r,fastest),e=r.analysis.elev,c=r.analysis.curve;let name=r._name||(i===0?'Primary provider route':'Alternative '+i);return `<div class="route ${r===easiest?'best':''} ${i===selectedRouteIndex?'selected':''}" data-i="${i}"><h3>${name} ${r===easiest?'<span class="badge">Easiest analyzed</span>':''} <span class="badge">${sc}/100 · ${difficulty(sc)}</span></h3><div class="metric"><span>Distance</span><b>${mi(r.distance).toFixed(0)} mi</b></div><div class="metric"><span>Estimated drive time</span><b>${fmtTime(r.duration)}</b></div><div class="metric"><span>Known size/weight screening</span><b>Applied</b></div><div class="metric"><span>Winding index</span><b>${c.turnPerMile.toFixed(1)}°/mi</b></div><div class="metric"><span>Sharp-turn density</span><b>${c.sharpPer100.toFixed(0)} / 100 mi</b></div>${e.ok?`<div class="metric"><span>Estimated max sampled grade</span><b>${e.maxGrade.toFixed(1)}%</b></div><div class="metric"><span>Estimated ≥5% grade</span><b>${e.steepMiles.toFixed(0)} mi</b></div><div class="metric"><span>Estimated climbing</span><b>${Math.round(e.climbFt/100)*100} ft</b></div>`:`<div class="warn">Elevation service unavailable; score uses route geometry only.</div>`}<div class="fine" style="margin-top:7px">${r._via?`Generated via corridor point ${r._via[1].toFixed(2)}, ${r._via[0].toFixed(2)}. `:''}Prototype score: higher is easier. It is not a legal/safety certification.</div></div>`}).join('');document.querySelectorAll('.route').forEach(el=>el.onclick=()=>highlight(+el.dataset.i));}
+function renderRoutes(routes){const fastest=Math.min(...routes.map(r=>r.duration));let ranked=[...routes].sort((a,b)=>easeScore(b,fastest)-easeScore(a,fastest));let easiest=ranked[0];$('results').innerHTML=routes.map((r,i)=>{let sc=easeScore(r,fastest),e=r.analysis.elev,c=r.analysis.curve;let name=r._name||(i===0?'Primary provider route':'Alternative '+i);return `<div class="route ${r===easiest?'best':''} ${i===selectedRouteIndex?'selected':''}" data-i="${i}"><h3>${name} ${r===easiest?'<span class="badge">Easiest analyzed</span>':''} <span class="badge">${sc}/100 · ${difficulty(sc)}</span></h3><div class="metric"><span>Distance</span><b>${mi(r.distance).toFixed(0)} mi</b></div><div class="metric"><span>Estimated drive time</span><b>${fmtTime(r.duration)}</b></div><div class="metric"><span>Known size/weight screening</span><b>Applied</b></div><div class="metric"><span>Winding index</span><b>${c.turnPerMile.toFixed(1)}°/mi</b></div><div class="metric"><span>Sharp-turn density</span><b>${c.sharpPer100.toFixed(0)} / 100 mi</b></div>${e.ok?`<div class="metric"><span>Estimated max sampled grade</span><b>${e.maxGrade.toFixed(1)}%</b></div><div class="metric"><span>Estimated ≥5% grade</span><b>${e.steepMiles.toFixed(0)} mi</b></div><div class="metric"><span>Estimated climbing</span><b>${Math.round(e.climbFt/100)*100} ft</b></div>`:`<div class="warn">Elevation service unavailable; score uses route geometry only.</div>`}<div class="fine" style="margin-top:7px">${r._viaLabel?`Generated through a real intermediate place: ${r._viaLabel}. `:''}Prototype score: higher is easier. It is not a legal/safety certification.</div></div>`}).join('');document.querySelectorAll('.route').forEach(el=>el.onclick=()=>highlight(+el.dataset.i));}
 let currentRoutes=[]; function highlight(sel){selectedRouteIndex=sel;currentRoutes.forEach((r,i)=>{if(map.getLayer('route'+i)){map.setPaintProperty('route'+i,'line-opacity',i===sel?0.95:0.22);map.setPaintProperty('route'+i,'line-width',i===sel?7:4)}});document.querySelectorAll('.route').forEach(el=>el.classList.toggle('selected',+el.dataset.i===sel));}
-function corridorPoints(a,b){const mid=[(a[0]+b[0])/2,(a[1]+b[1])/2],dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy)||1;const trip=hav(a,b)/1609.344;const off=Math.min(1.05,Math.max(.38,trip/700));const px=-dy/len,py=dx/len;return [[mid[0]+px*off,mid[1]+py*off],[mid[0]-px*off,mid[1]-py*off]];}
-async function extraCorridorRoutes(a,b,qs){const out=[];const pts=corridorPoints(a,b);for(let k=0;k<pts.length;k++){const cp=pts[k],q=new URLSearchParams(qs);q.set('alternatives','false');const path=`${a[0]},${a[1]};${cp[0]},${cp[1]};${b[0]},${b[1]}`;try{let rr=await fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${path}?${q}`),jj=await rr.json();if(rr.ok&&jj.code==='Ok'&&jj.routes?.[0]){let rt=jj.routes[0];rt._via=cp;rt._name=(cp[1]>((a[1]+b[1])/2)?'Northern corridor':'Southern corridor');out.push(rt)}}catch(e){}}return out;}
-function dedupeRoutes(routes){const out=[];for(const r of routes){if(!out.some(x=>Math.abs(x.distance-r.distance)<1609&&Math.abs(x.duration-r.duration)<180))out.push(r)}return out.slice(0,5);}
-function draw(routes,a,b,v=null){currentRoutes=routes;markers.forEach(m=>m.remove());const pts=v?[a,v,b]:[a,b];markers=pts.map(c=>new mapboxgl.Marker().setLngLat(c).addTo(map));const bounds=new mapboxgl.LngLatBounds();pts.forEach(c=>bounds.extend(c));routes.forEach(r=>r.geometry.coordinates.forEach(c=>bounds.extend(c)));map.fitBounds(bounds,{padding:55});routes.forEach((r,i)=>{let id='route'+i;if(map.getLayer(id))map.removeLayer(id);if(map.getSource(id))map.removeSource(id);map.addSource(id,{type:'geojson',data:{type:'Feature',geometry:r.geometry}});map.addLayer({id,type:'line',source:id,layout:{'line-join':'round','line-cap':'round'},paint:{'line-width':i===0?6:4,'line-opacity':i===0?.95:.35,'line-color':colors[i]}})});}
+function routeFingerprint(r){
+  const pts=sampleLine(r.geometry.coordinates,45);
+  return pts;
+}
+function routeSimilarity(a,b){
+  const A=routeFingerprint(a),B=routeFingerprint(b);
+  let near=0;
+  for(const p of A){let best=Infinity;for(const q of B)best=Math.min(best,hav(p,q));if(best<2500)near++;}
+  return near/Math.max(1,A.length);
+}
+function hasDogleg(r,a,b){
+  const pts=sampleLine(r.geometry.coordinates,70);
+  const direct=hav(a,b), route=r.distance;
+  if(route>direct*1.65)return true;
+  let backwards=0,prev=hav(pts[0],b);
+  for(let i=1;i<pts.length;i++){const d=hav(pts[i],b);if(d>prev+3500)backwards++;prev=d;}
+  return backwards>8;
+}
+async function nearbyPlace(coord,token){
+  try{
+    const u=`https://api.mapbox.com/search/geocode/v6/reverse?longitude=${coord[0]}&latitude=${coord[1]}&types=place,locality&limit=1&access_token=${encodeURIComponent(token)}`;
+    const r=await fetch(u),j=await r.json(); const f=j.features?.[0]; if(!f)return null;
+    const p=f.properties||{}, c=p.coordinates||{}; const coords=c.longitude!=null?[c.longitude,c.latitude]:f.geometry?.coordinates;
+    if(!coords)return null;
+    return {coords,label:p.full_address||[p.name,p.place_formatted].filter(Boolean).join(', ')||'Intermediate place'};
+  }catch(e){return null;}
+}
+function discoveryProbes(a,b){
+  const out=[],dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy)||1,px=-dy/len,py=dx/len;
+  const trip=hav(a,b)/1609.344, off=Math.min(.70,Math.max(.18,trip/1100));
+  for(const t of [.32,.48,.64]){
+    const base=[a[0]+dx*t,a[1]+dy*t];
+    out.push(base,[base[0]+px*off,base[1]+py*off],[base[0]-px*off,base[1]-py*off]);
+  }
+  return out;
+}
+async function routeViaPlace(a,b,place,qs){
+  const q=new URLSearchParams(qs);q.set('alternatives','false');
+  const c=place.coords,path=`${a[0]},${a[1]};${c[0]},${c[1]};${b[0]},${b[1]}`;
+  try{const rr=await fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${path}?${q}`),jj=await rr.json();if(rr.ok&&jj.code==='Ok'&&jj.routes?.[0]){const rt=jj.routes[0];rt._via=c;rt._viaLabel=place.label;rt._name='Via '+place.label.split(',')[0];return rt;}}catch(e){}
+  return null;
+}
+async function discoverCorridorRoutes(a,b,qs,token,existing){
+  const places=[],seen=new Set();
+  for(const probe of discoveryProbes(a,b)){
+    const p=await nearbyPlace(probe,token);if(!p)continue;
+    const key=p.label.toLowerCase().split(',').slice(0,2).join(',');
+    if(!seen.has(key)&&hav(a,p.coords)>32000&&hav(p.coords,b)>32000){seen.add(key);places.push(p);}
+  }
+  const candidates=[];
+  for(const p of places){const rt=await routeViaPlace(a,b,p,qs);if(!rt||hasDogleg(rt,a,b))continue;candidates.push(rt);}
+  candidates.sort((x,y)=>x.distance-y.distance);
+  const out=[];
+  for(const r of candidates){
+    const pool=existing.concat(out); if(pool.some(x=>routeSimilarity(r,x)>.90))continue;
+    out.push(r); if(out.length>=3)break;
+  }
+  return out;
+}
+function dedupeRoutes(routes){
+  const out=[];
+  for(const r of routes){if(!out.some(x=>routeSimilarity(r,x)>.94))out.push(r);}
+  return out.slice(0,6);
+}
+function draw(routes,a,b,v=null){currentRoutes=routes;markers.forEach(m=>m.remove());const pts=v?[a,v,b]:[a,b];markers=pts.map(c=>new mapboxgl.Marker().setLngLat(c).addTo(map));const bounds=new mapboxgl.LngLatBounds();pts.forEach(c=>bounds.extend(c));routes.forEach(r=>r.geometry.coordinates.forEach(c=>bounds.extend(c)));map.fitBounds(bounds,{padding:55});routes.forEach((r,i)=>{let id='route'+i;if(map.getLayer(id))map.removeLayer(id);if(map.getSource(id))map.removeSource(id);map.addSource(id,{type:'geojson',data:{type:'Feature',geometry:r.geometry}});map.addLayer({id,type:'line',source:id,layout:{'line-join':'round','line-cap':'round'},paint:{'line-width':i===0?6:4,'line-opacity':i===0?.95:.35,'line-color':colors[i%colors.length]}})});}
 $('go').onclick=async()=>{try{
   const token=$('token').value.trim();if(!token)throw new Error('Add a free Mapbox public token first.');localStorage.setItem('rvER_token',token);
   $('status').textContent='Finding places…';if(!map)initMap(token);
@@ -188,10 +249,10 @@ $('go').onclick=async()=>{try{
   $('status').textContent='Calculating RV-screened routes…';let qs=new URLSearchParams({alternatives:'true',overview:'full',geometries:'geojson',steps:'true',max_height:ftm(+$('height').value).toFixed(3),max_width:ftm(+$('width').value).toFixed(3),max_weight:lbton(+$('rvweight').value).toFixed(3),access_token:token});if(exclude.length)qs.set('exclude',exclude.join(','));
   let url=`https://api.mapbox.com/directions/v5/mapbox/driving/${coordPath}?${qs}`;let r=await fetch(url),j=await r.json();if(!r.ok||j.code!=='Ok')throw new Error(j.message||j.code||'Routing failed');
   let allRoutes=[...j.routes];
-  if(!v){$('status').textContent='Generating additional north/south corridor routes…';allRoutes=dedupeRoutes(allRoutes.concat(await extraCorridorRoutes(a,b,qs)));}
+  if(!v){$('status').textContent='Discovering meaningful alternative corridors…';allRoutes=dedupeRoutes(allRoutes.concat(await discoverCorridorRoutes(a,b,qs,token,allRoutes)));}
   allRoutes.forEach((rt,i)=>{if(!rt._name)rt._name=i===0?'Primary provider route':'Provider alternative '+i});
   const shortest=Math.min(...allRoutes.map(x=>x.distance));const delta=mi(shortest-base.distance);$('baseline').innerHTML=`<b>Normal-car baseline:</b> ${mi(base.distance).toFixed(0)} mi · ${fmtTime(base.duration)}<br><b>Shortest RV-screened route:</b> ${mi(shortest).toFixed(0)} mi · ${delta>=0?'+':''}${delta.toFixed(0)} mi vs. baseline${Math.abs(delta)>75?'<div class="warn"><b>Large RV detour detected.</b> Verify the resolved locations and restriction settings before trusting this route.</div>':''}`;
-  $('status').textContent='Analyzing curves and grades…';selectedRouteIndex=0;await analyzeRoutes(allRoutes);renderRoutes(allRoutes);draw(allRoutes,a,b,v);highlight(0);$('status').textContent=`Analyzed ${allRoutes.length} RV-screened route${allRoutes.length===1?'':'s'}, including extra corridor candidates when available. Weight screening uses RV weight only (${(+$('rvweight').value).toLocaleString()} lb), not RV + toad.`;
+  $('status').textContent='Analyzing curves and grades…';selectedRouteIndex=0;await analyzeRoutes(allRoutes);renderRoutes(allRoutes);draw(allRoutes,a,b,v);highlight(0);$('status').textContent=`Analyzed ${allRoutes.length} RV-screened route${allRoutes.length===1?'':'s'}, including distinct place-based corridor candidates when available. Weight screening uses RV weight only (${(+$('rvweight').value).toLocaleString()} lb), not RV + toad.`;
 }catch(e){$('status').textContent='Error: '+e.message;}};
 $('googleMaps').onclick=()=>{if(!lastResolved)return;const {a,v,b}=lastResolved;const selected=currentRoutes[selectedRouteIndex];const routeVia=v||(selected&&selected._via)||null;let u='https://www.google.com/maps/dir/?api=1&travelmode=driving&origin='+encodeURIComponent(a[1]+','+a[0])+'&destination='+encodeURIComponent(b[1]+','+b[0]);if(routeVia)u+='&waypoints='+encodeURIComponent(routeVia[1]+','+routeVia[0]);window.open(u,'_blank','noopener');};
 if($('token').value) initMap($('token').value);
